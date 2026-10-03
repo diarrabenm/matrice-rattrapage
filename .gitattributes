@@ -1,0 +1,5 @@
+# Fins de ligne Unix pour les fichiers exécutés dans Linux / les conteneurs
+*.sh   text eol=lf
+*.sql  text eol=lf
+Dockerfile text eol=lf
+*.yaml text eol=lf
