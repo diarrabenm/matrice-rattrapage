@@ -17,3 +17,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+# Sauvegardes générées par les scénarios
+c4-docker/backups/

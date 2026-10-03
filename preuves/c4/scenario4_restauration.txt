@@ -1,0 +1,41 @@
+
+===== Scénario 4 : sauvegarde puis restauration du jeu de test =====
+ seances_jeu_test 
+------------------
+                6
+(1 row)
+
+$ pg_dump --clean --if-exists > backups/jeu_test.sql
+-- Incident simulé : suppression de toutes les séances
+DELETE 6
+ seances_apres_incident 
+------------------------
+                      0
+(1 row)
+
+$ psql < backups/jeu_test.sql
+ set_config 
+------------
+ 
+(1 row)
+
+ setval 
+--------
+      6
+(1 row)
+
+ seances_restaurees 
+--------------------
+                  6
+(1 row)
+
+ date_seance | demi_journee |          titre           
+-------------+--------------+--------------------------
+ 2026-10-19  | matin        | HTML & structure
+ 2026-10-19  | apres-midi   | CSS & mise en page
+ 2026-10-20  | matin        | Responsive & formulaires
+ 2026-10-21  | matin        | Accessibilité numérique
+ 2026-10-22  | matin        | UX & tests utilisateurs
+ 2026-10-23  | matin        | Git & collaboration
+(6 rows)
+

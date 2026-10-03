@@ -1,0 +1,37 @@
+
+===== Scénario 2 : un redémarrage complet préserve les données (volume db_data) =====
+NOTICE:  table "seance" does not exist, skipping
+INSERT 0 1
+ seances_avant 
+---------------
+             7
+(1 row)
+
+$ docker compose down   (sans -v : le volume est conservé)
+ Container matrice-c4-app-1 Stopping 
+ Container matrice-c4-app-1 Stopped 
+ Container matrice-c4-app-1 Removing 
+ Container matrice-c4-app-1 Removed 
+ Container matrice-c4-db-1 Stopping 
+ Container matrice-c4-db-1 Stopped 
+ Container matrice-c4-db-1 Removing 
+ Container matrice-c4-db-1 Removed 
+ Network matrice-c4_backend Removing 
+ Network matrice-c4_backend Removed 
+$ docker volume ls
+DRIVER    VOLUME NAME
+local     matrice-c4_db_data
+$ docker compose up -d
+ Container matrice-c4-db-1 Started 
+ Container matrice-c4-db-1 Healthy 
+ Container matrice-c4-app-1 Started 
+ seances_apres 
+---------------
+             7
+(1 row)
+
+              titre              
+---------------------------------
+ Ligne ajoutée avant redémarrage
+(1 row)
+

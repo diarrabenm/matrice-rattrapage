@@ -1,0 +1,44 @@
+
+===== Scénario 1a : démarrage à froid, l'app attend que la base soit DISPONIBLE =====
+ Container matrice-c4-app-1 Stopping 
+ Container matrice-c4-app-1 Stopped 
+ Container matrice-c4-app-1 Removing 
+ Container matrice-c4-app-1 Removed 
+ Container matrice-c4-db-1 Stopping 
+ Container matrice-c4-db-1 Stopped 
+ Container matrice-c4-db-1 Removing 
+ Container matrice-c4-db-1 Removed 
+ Volume matrice-c4_db_data Removing 
+ Network matrice-c4_backend Removing 
+ Volume matrice-c4_db_data Removed 
+ Network matrice-c4_backend Removed 
+$ docker compose up -d --build
+ Container matrice-c4-db-1 Creating 
+ Container matrice-c4-db-1 Created 
+ Container matrice-c4-app-1 Creating 
+ Container matrice-c4-app-1 Created 
+ Container matrice-c4-db-1 Starting 
+ Container matrice-c4-db-1 Started 
+ Container matrice-c4-db-1 Waiting 
+ Container matrice-c4-db-1 Healthy 
+ Container matrice-c4-app-1 Starting 
+ Container matrice-c4-app-1 Started 
+
+===== Scénario 1b : la base tombe pendant que l'app tourne =====
+$ docker compose stop db
+ Container matrice-c4-db-1 Stopping 
+ Container matrice-c4-db-1 Stopped 
+$ curl http://127.0.0.1:8000/health
+{"status":"ok"}  -> HTTP 200
+$ curl http://127.0.0.1:8000/ready
+{"status":"unavailable","database":"down"}  -> HTTP 503
+$ docker compose ps
+SERVICE   STATUS
+app       Up 13 seconds (healthy)
+=> Conteneur app démarré et /health OK, mais service NON disponible (/ready = 503).
+
+===== Scénario 1c : la base revient =====
+ Container matrice-c4-db-1 Starting 
+ Container matrice-c4-db-1 Started 
+$ curl http://127.0.0.1:8000/ready
+{"status":"ok","database":"up"}  -> HTTP 200
