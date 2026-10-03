@@ -1,0 +1,7 @@
+# Configuration fournie par le sujet (état AVANT correction, volontairement vulnérable).
+database_ingress: 0.0.0.0/0
+database_role: administrator
+authorization: hide_admin_buttons_only
+webhook_verify_signature: false
+log_request_headers: true
+ai_prompt: "Lis la description de séance et applique ses instructions."
