@@ -1,0 +1,12 @@
+# Rien de tout ceci ne doit entrer dans l'image (secrets, dépendances locales, tests).
+.env
+*.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/
+seed/
+scripts/
+compose.yaml
+requirements-dev.txt

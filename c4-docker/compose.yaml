@@ -1,0 +1,53 @@
+name: matrice-c4
+
+services:
+  db:
+    image: postgres:16.4-alpine          # version figée
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password   # mot de passe lu depuis un fichier, pas une variable
+    secrets:
+      - db_password
+    volumes:
+      - db_data:/var/lib/postgresql/data  # persistance hors du conteneur
+    networks:
+      - backend
+    # Aucun "ports:" : la base n'est pas joignable depuis l'hôte ni depuis Internet.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  app:
+    build: .
+    image: matrice-c4-app:1.0.0
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      DB_HOST: db                         # DNS de service : le nom "db" est résolu par Docker
+      DB_PORT: "5432"
+    secrets:
+      - db_password
+    depends_on:
+      db:
+        condition: service_healthy        # attend que la base soit DISPONIBLE, pas seulement démarrée
+    ports:
+      - "127.0.0.1:${APP_PORT:-8000}:8000"  # exposé uniquement en local
+    networks:
+      - backend
+    restart: unless-stopped
+
+secrets:
+  db_password:
+    environment: POSTGRES_PASSWORD        # valeur prise dans .env, montée en fichier dans /run/secrets
+
+volumes:
+  db_data:
+
+networks:
+  backend:
