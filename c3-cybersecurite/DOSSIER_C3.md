@@ -150,3 +150,42 @@ flowchart LR
 | FC5 · API → Logs | Événements techniques | Liste blanche de champs, masquage, accès restreint | R5 |
 
 Le navigateur est **toujours** en zone non fiable : tout ce qu'il envoie, y compris le fait qu'un bouton soit caché, peut être modifié par l'utilisateur.
+
+## 4. Logs sans secret et alerte déterministe
+
+### 4.1 Logs sans secret
+Code : [alerte/masquage.py](alerte/masquage.py). Il applique deux protections, dans cet ordre :
+
+1. **Liste blanche de champs.** Seuls les champs utiles au diagnostic sont écrits (`component`, `event`, `delivery`, `attempt`, `status`, `reason`, `source`, `state`, `latency_ms`, `tag`, `method`, `path`). Les en-têtes et le corps des requêtes ne sont jamais journalisés. Cela corrige `log_request_headers: true` (R5).
+2. **Masquage.** Toute valeur qui ressemble à un secret est remplacée par `***` : `Authorization`, `Cookie`, `X-Signature`, `password=`, `token=`, `secret=`, `api_key=`, et le mot de passe dans une URL `postgresql://`. C'est un filet de sécurité, au cas où un secret se glisserait dans un champ autorisé.
+
+| Avant | Après |
+|---|---|
+| `Authorization: Bearer eyJhbGciOi...` | `Authorization: ***` |
+| `postgresql://matrice:motdepasse@db:5432/matrice` | `postgresql://matrice:***@db:5432/matrice` |
+| `headers="..." body="..." event=e41` | `event=e41` (champs non autorisés supprimés) |
+
+Le texte libre (par exemple `text=` du classifieur, O4) ne fait pas partie de la liste blanche : il peut contenir des données personnelles ou une injection. On journalise seulement son identifiant (`event`) et son `tag`.
+
+### 4.2 Règle d'alerte déterministe
+Code commenté : [alerte/regle_alerte.py](alerte/regle_alerte.py). **Déterministe** veut dire : seuils fixes, aucune IA, aucun hasard. Les mêmes logs donnent toujours les mêmes alertes, et on peut donc expliquer et rejouer chaque alerte.
+
+| Règle | Condition exacte | Gravité | Pourquoi ce seuil |
+|---|---|---|---|
+| **A1** Rafale de signatures invalides | Au moins **3** événements `component=webhook status=401 reason=bad_signature` venant d'une **même `source`**, en **60 s** ou moins | Haute | 1 échec isolé peut être une erreur ponctuelle. 3 en une minute indiquent une rotation de secret ratée (H1) ou une falsification (H2). Une seule alerte par rafale, pour ne pas noyer l'équipe. |
+| **A2** Synchronisation en échec | Un événement `component=delivery` avec `state=quarantine` | Moyenne | La quarantaine signifie que plus aucune relance automatique n'aura lieu : sans intervention humaine, la donnée ne sera jamais livrée. |
+
+Lancement, depuis `c3-cybersecurite/` : `python -m alerte.regle_alerte donnees/logs_sujet.log`. Le code de sortie vaut `1` s'il y a au moins une alerte, ce qui permet de brancher la règle sur une tâche planifiée ou une CI.
+
+### 4.3 Exemples déclenchant et ne déclenchant pas
+
+| Fichier | Contenu | Résultat |
+|---|---|---|
+| [a1_declenche.log](exemples/a1_declenche.log) | e41, e42, e43 : 3 `bad_signature` de `partner-A` en 2 s | **A1 déclenchée** |
+| [a1_ne_declenche_pas.log](exemples/a1_ne_declenche_pas.log) | 3 `bad_signature` étalés sur 2 min ; sources toutes différentes ; 3 `401` mais pour `expired_token` ; un succès `200` | Aucune alerte |
+| [a2_declenche.log](exemples/a2_declenche.log) | `d9` : 3 échecs `503` puis `quarantine` | **A2 déclenchée** |
+| [a2_ne_declenche_pas.log](exemples/a2_ne_declenche_pas.log) | `d10` réussit tout de suite ; `d11` échoue une fois puis réussit | Aucune alerte |
+
+Sur les logs complets du sujet, la règle produit exactement deux alertes, A1 (`partner-A`) et A2 (`d9`) : le signal à investiguer et la synchronisation en échec identifiés en section 1.1. Trace d'exécution : [preuves/c3/execution_regle_alerte.txt](../preuves/c3/execution_regle_alerte.txt). Les 10 tests ([tests/test_alerte.py](tests/test_alerte.py)) vérifient ces cas, le déterminisme et le masquage.
+
+**Limite :** e44 (injection IA) ne déclenche pas d'alerte, car il est déjà traité par le classifieur (`tag=a_revoir`) et mis en revue humaine (R7). Une règle A3 pourrait compter les `a_revoir` par auteur si ce volume devenait significatif.
