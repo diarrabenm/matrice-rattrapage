@@ -15,6 +15,9 @@ node_modules/
 .vscode/
 .idea/
 *.log
+# ... sauf les logs d'analyse du module C3 (données du sujet et exemples)
+!c3-cybersecurite/donnees/*.log
+!c3-cybersecurite/exemples/*.log
 .DS_Store
 Thumbs.db
 
