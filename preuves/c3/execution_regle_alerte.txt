@@ -1,0 +1,33 @@
+$ python -m alerte.regle_alerte donnees/logs_sujet.log
+[ALERTE HAUTE] A1_RAFALE_SIGNATURE_INVALIDE : 3 signatures invalides en <= 60s depuis partner-A : à investiguer
+[ALERTE MOYENNE] A2_SYNCHRONISATION_EN_ECHEC : Livraison d9 en quarantaine après 3 tentatives (dernier statut 503)
+(code de sortie : 1)
+
+$ python -m alerte.regle_alerte exemples/a1_declenche.log
+[ALERTE HAUTE] A1_RAFALE_SIGNATURE_INVALIDE : 3 signatures invalides en <= 60s depuis partner-A : à investiguer
+(code de sortie : 1)
+
+$ python -m alerte.regle_alerte exemples/a1_ne_declenche_pas.log
+Aucune alerte.
+(code de sortie : 0)
+
+$ python -m alerte.regle_alerte exemples/a2_declenche.log
+[ALERTE MOYENNE] A2_SYNCHRONISATION_EN_ECHEC : Livraison d9 en quarantaine après 3 tentatives (dernier statut 503)
+(code de sortie : 1)
+
+$ python -m alerte.regle_alerte exemples/a2_ne_declenche_pas.log
+Aucune alerte.
+(code de sortie : 0)
+
+$ python -m pytest -v
+tests/test_alerte.py::test_a1_declenche_sur_les_3_rejets_de_partner_a PASSED [ 10%]
+tests/test_alerte.py::test_a1_ne_declenche_pas PASSED                    [ 20%]
+tests/test_alerte.py::test_a1_une_seule_alerte_pour_une_rafale_de_5 PASSED [ 30%]
+tests/test_alerte.py::test_a2_declenche_sur_d9_en_quarantaine PASSED     [ 40%]
+tests/test_alerte.py::test_a2_ne_declenche_pas_si_la_livraison_finit_par_reussir PASSED [ 50%]
+tests/test_alerte.py::test_logs_du_sujet_declenchent_a1_et_a2 PASSED     [ 60%]
+tests/test_alerte.py::test_le_resultat_est_deterministe PASSED           [ 70%]
+tests/test_alerte.py::test_masque_les_en_tetes_et_parametres_sensibles PASSED [ 80%]
+tests/test_alerte.py::test_ne_modifie_pas_une_ligne_sans_secret PASSED   [ 90%]
+tests/test_alerte.py::test_liste_blanche_supprime_les_champs_non_autorises PASSED [100%]
+============================= 10 passed in 0.05s ==============================
