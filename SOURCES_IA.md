@@ -4,7 +4,7 @@
 
 J'ai piloté ce projet de bout en bout et je me suis appuyé sur un assistant IA (**Claude Code**, d'Anthropic, utilisé dans VS Code), comme le sujet l'autorise.
 
-**Mon rôle :** analyse du sujet avec l'assistant et validation de la liste des exigences ; choix de la pile (FastAPI, PostgreSQL) et de l'organisation en séances du 3 au 6 octobre 2026 ; contrôle du périmètre (aucun ajout hors cahier des charges) ; décisions sur le dépôt (structure, nom, fichiers gardés hors dépôt) ; relecture ; vérification des résultats et démonstrations en direct.
+**Mon rôle :** analyse du sujet avec l'assistant et validation de la liste des exigences ; choix de la pile (FastAPI, PostgreSQL) et de l'organisation du travail en plusieurs séances ; contrôle du périmètre (aucun ajout hors cahier des charges) ; décisions sur le dépôt (structure, nom, fichiers gardés hors dépôt) ; relecture ; vérification des résultats et démonstrations en direct.
 
 **Rôle de l'assistant :** rédaction du code (micro-application, Docker, règle d'alerte, tests), des documents (dossier C3, explications C4) et exécution des scénarios, sous ma direction.
 
@@ -28,8 +28,7 @@ Requêtes adressées à l'assistant, reformulées sans les fautes de frappe :
 
 - « Je vais te donner le sujet : respecte les consignes et fais exactement ce qui est demandé dans le cahier des charges. »
 - « Rassure-moi : tu fais seulement ce qui est demandé dans le cahier des charges, tu n'ajoutes rien d'autre ? »
-- « Je ne veux pas que tu finisses tout le projet aujourd'hui. » (le travail a été réparti sur 4 jours)
-- « Lance l'application dans mon navigateur. »
+- « Je ne veux pas que tu finisses tout le projet aujourd'hui. »- « Lance l'application dans mon navigateur. »
 - « Fais toi-même la démonstration dans le terminal » (arrêt de la base, puis `/health` et `/ready`).
 - « Fais-moi un résumé de l'avancement du projet. »
 
