@@ -4,8 +4,6 @@
 
 J'ai piloté ce projet de bout en bout et j'ai utilisé l'IA, puisque le sujet l'autorise.
 
-**Mon rôle :** analyse du sujet avec l'assistant et validation de la liste des exigences ; choix de la pile (FastAPI, PostgreSQL) et de l'organisation du travail en plusieurs séances ; contrôle du périmètre (aucun ajout hors cahier des charges) ; décisions sur le dépôt (structure, nom, fichiers gardés hors dépôt) ; relecture ; vérification des résultats et démonstrations en direct.
-
 **Rôle de l'assistant :** rédaction du code (micro-application, Docker, règle d'alerte, tests), des documents (dossier C3, explications C4) et exécution des scénarios, sous ma direction.
 
 ## Usages, par fichier
