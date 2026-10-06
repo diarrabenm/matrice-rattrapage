@@ -1,4 +1,4 @@
-# MATRiCE · WEB2 · Rattrapage individuel
+# MATRiCE · Rattrapage individuel
 
 Étudiant : Ben Moriba DIARRA. Modules attribués : **C3** (Cybersécurité / Monitoring IA) et **C4** (Docker & Compose).
 
@@ -38,8 +38,8 @@ Chaque module est autonome et se vérifie sans l'autre.
 | bash | Linux, macOS, ou Git Bash / WSL sous Windows | Script des scénarios C4 |
 
 ```bash
-git clone https://github.com/diarrabenm/matrice-rattrapage-web2.git
-cd matrice-rattrapage-web2
+git clone https://github.com/diarrabenm/matrice-rattrapage.git
+cd matrice-rattrapage
 ```
 
 Sous Windows (PowerShell), remplacer `source .venv/bin/activate` par `.venv\Scripts\activate` et `cp` par `copy`.
