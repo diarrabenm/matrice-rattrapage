@@ -4,8 +4,6 @@
 
 J'ai piloté ce projet de bout en bout et j'ai utilisé l'IA, puisque le sujet l'autorise.
 
-**Rôle de l'assistant :** rédaction du code (micro-application, Docker, règle d'alerte, tests), des documents (dossier C3, explications C4) et exécution des scénarios, sous ma direction.
-
 ## Fichiers concernés
 
 Code et documentation des dossiers `c3-cybersecurite/` et `c4-docker/`, ainsi que `README.md` et `JUSTIFICATIONS.md`.
