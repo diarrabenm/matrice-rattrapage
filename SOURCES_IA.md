@@ -1,10 +1,12 @@
 # Sources et usages de l'IA
 
-Le sujet autorise l'IA, à condition que tout code ou configuration puisse être expliqué personnellement. Ce document déclare précisément comment je l'ai utilisée.
+## Usage de l'IA
 
-## Outil utilisé
+J'ai piloté ce projet de bout en bout et je me suis appuyé sur un assistant IA (**Claude Code**, d'Anthropic, utilisé dans VS Code), comme le sujet l'autorise.
 
-**Claude Code** (assistant de programmation d'Anthropic, modèle Claude Opus), utilisé dans VS Code du 3 au 6 octobre 2026, en plusieurs séances de travail.
+**Mon rôle :** analyse du sujet avec l'assistant et validation de la liste des exigences ; choix de la pile (FastAPI, PostgreSQL) et de l'organisation en séances du 3 au 6 octobre 2026 ; contrôle du périmètre (aucun ajout hors cahier des charges) ; décisions sur le dépôt (structure, nom, fichiers gardés hors dépôt) ; relecture ; vérification des résultats et démonstrations en direct.
+
+**Rôle de l'assistant :** rédaction du code (micro-application, Docker, règle d'alerte, tests), des documents (dossier C3, explications C4) et exécution des scénarios, sous ma direction.
 
 ## Usages, par fichier
 
